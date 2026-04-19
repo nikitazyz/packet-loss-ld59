@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: PacketResourcePack
   m_EditorClassIdentifier: Assembly-CSharp:UI:PacketResourcePack
-  _normal: {fileID: 8851489139641355192, guid: 282a4a1d0ba6b8a4f88f718a6e614314, type: 3}
-  _suspicious: {fileID: -4301329749613159308, guid: 5f627f244be7d7b46b1acf1fecb95c39, type: 3}
-  _virus: {fileID: -8625906013721215279, guid: cc36f7feaf8887949aaea4b9f8216aca, type: 3}
+  _normal: {fileID: -527773148873748845, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
+  _suspicious: {fileID: -5256023296792003769, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
+  _virus: {fileID: 2413972784570495900, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
   _packetNames:
   - Sample Packet

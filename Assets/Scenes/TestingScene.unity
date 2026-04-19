@@ -392,7 +392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8449985750341443943, guid: ed674773726d44c44a09dd1ff2dcbd27, type: 3}
+  m_Sprite: {fileID: -5750604244985589722, guid: c04ee2db710ec2b4298a202da133bb38, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -9065023440135913290, guid: eac73a0c03514e34fa1d220dabb074f0, type: 3}
+  m_Sprite: {fileID: 4167329491285213733, guid: c04ee2db710ec2b4298a202da133bb38, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1097,7 +1097,7 @@ Canvas:
   m_GameObject: {fileID: 1372556382}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 1654124810}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -1190,7 +1190,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8747842733061191018, guid: b1ae26500dd0a2d4182121b11b0089fe, type: 3}
+  m_Sprite: {fileID: -4527665439257864785, guid: c04ee2db710ec2b4298a202da133bb38, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

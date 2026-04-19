@@ -1,13 +1,17 @@
+using System;
 using Data;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI
 {
     public class PacketCard : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
+        public static event Action<PacketCard, PointerEventData> OnDrop;
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private Image _background;
         [SerializeField] private ProgressBar _bar;
@@ -15,6 +19,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _weightText;
 
         [SerializeField] private PacketResourcePack _resourcePack;
+        
+        public CardContainer CurrentContainer { get; set; }
 
         private bool _isVirus;
         private bool _isSuspicious;
@@ -26,6 +32,7 @@ namespace UI
         public bool IsVirus => _isVirus;
         public bool IsSuspicious => _isSuspicious;
         public int Weight => _weight;
+        public bool CanDrag { get; set; } = true;
 
         private Vector2 _mouseOffset;
         private bool _isDragging;
@@ -41,6 +48,13 @@ namespace UI
             _label.text = CreateLabel();
             _weightText.text = _weight.ToString() + "b";
             UpdateUI();
+            AnimatePopup();
+        }
+
+        private void AnimatePopup()
+        {
+            _mainPanel.transform.localScale = Vector3.zero;
+            Tween.Scale(_mainPanel.transform, new TweenSettings<float>(1f, 0.2f, Ease.OutQuad));
         }
 
         private string CreateLabel()
@@ -79,35 +93,33 @@ namespace UI
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!_isDragging)
+            {
+                return;
+            }
             _mainPanel.transform.position = eventData.position + _mouseOffset;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!CanDrag)
+            {
+                return;
+            }
             _isDragging = true;
             _mouseOffset = (Vector2)_mainPanel.transform.position - eventData.position;
+            transform.SetAsLastSibling();
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!_isDragging)
+            {
+                return;
+            }
             _isDragging = false;
             _mainPanel.transform.localPosition = Vector3.zero;
+            OnDrop?.Invoke(this, eventData);
         }
-    }
-
-    [CreateAssetMenu(menuName = "Packet Resource Pack", fileName = "PacketResourcePack", order = 0)]
-    public class PacketResourcePack : ScriptableObject
-    {
-        [SerializeField] private Sprite _normal;
-        [SerializeField] private Sprite _suspicious;
-        [SerializeField] private Sprite _virus;
-
-        [SerializeField] private string[] _packetNames;
-        
-        public Sprite Normal => _normal;
-        public Sprite Suspicious => _suspicious;
-        public Sprite Virus => _virus;
-        
-        public string[] PacketNames => _packetNames;
     }
 }
