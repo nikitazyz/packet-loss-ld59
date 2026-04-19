@@ -578,6 +578,46 @@ MonoBehaviour:
       _packetData: {fileID: 11400000, guid: a859b655cec85064786e90039c217951, type: 2}
     _intervalMin: 3
     _intervalMax: 6
+  - _pointsToComplete: 5
+    _packetPool:
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 35cddb81434115043b81048bef47b673, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 8ff109ce22a7e4e44a3ec0aed55abc6b, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: a859b655cec85064786e90039c217951, type: 2}
+    _intervalMin: 3
+    _intervalMax: 6
+  - _pointsToComplete: 5
+    _packetPool:
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 35cddb81434115043b81048bef47b673, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 8ff109ce22a7e4e44a3ec0aed55abc6b, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: a859b655cec85064786e90039c217951, type: 2}
+    _intervalMin: 3
+    _intervalMax: 6
+  - _pointsToComplete: 5
+    _packetPool:
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 35cddb81434115043b81048bef47b673, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 8ff109ce22a7e4e44a3ec0aed55abc6b, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: a859b655cec85064786e90039c217951, type: 2}
+    _intervalMin: 3
+    _intervalMax: 6
+  - _pointsToComplete: 5
+    _packetPool:
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 35cddb81434115043b81048bef47b673, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: 8ff109ce22a7e4e44a3ec0aed55abc6b, type: 2}
+    - _weight: 1
+      _packetData: {fileID: 11400000, guid: a859b655cec85064786e90039c217951, type: 2}
+    _intervalMin: 3
+    _intervalMax: 6
   _buffer: {fileID: 1036548430}
   _sendingContainer: {fileID: 232694708}
   _deletingContainer: {fileID: 559381449}
