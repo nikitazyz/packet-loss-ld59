@@ -20,7 +20,7 @@ namespace UI
         protected override void Awake()
         {
             base.Awake();
-            _sendingProgress = new float[ContainerSize];
+            _sendingProgress = new float[MaxSlots];
             PacketCard.OnDrop += OnPacketDrop;
         }
 
@@ -75,7 +75,7 @@ namespace UI
                     _progressBars[i].gameObject.SetActive(false);
                     continue;
                 }
-                _sendingProgress[i] += Time.deltaTime * (Game.Upgrades.Contains(_speed) ? 1 : 2);
+                _sendingProgress[i] += Time.deltaTime * (Game.Upgrades.Contains(_speed) ? 3 : 1);
                 _progressBars[i].gameObject.SetActive(true);
                 _progressBars[i].Value = _sendingProgress[i] / (_time * card.Weight);
                 if (_sendingProgress[i] >= _time * card.Weight || Game.Upgrades.Contains(_instant))

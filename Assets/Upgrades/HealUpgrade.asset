@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ea512c63ab44407bbba315df597bc39, type: 3}
-  m_Name: FlagUpgrade 8
-  m_EditorClassIdentifier: Assembly-CSharp::Data.FlagUpgrade
-  <Name>k__BackingField: 
-  <UpgradeType>k__BackingField: 0
+  m_Script: {fileID: 11500000, guid: bea0682568ee410db10e478cecf1be9d, type: 3}
+  m_Name: HealUpgrade
+  m_EditorClassIdentifier: Assembly-CSharp::Data.HealUpgrade
+  <Name>k__BackingField: Heal yourself
+  <UpgradeType>k__BackingField: 9
+  maxHealth: 3

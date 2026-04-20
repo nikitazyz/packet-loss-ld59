@@ -12,7 +12,7 @@ namespace Data
         public UpgradeType UpgradeType { get; private set; }
         
         
-        public void Execute(Game game)
+        public virtual void Execute(Game game)
         {
             game.Upgrades.Add(UpgradeType);
         }

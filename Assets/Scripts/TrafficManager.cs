@@ -20,6 +20,7 @@ public class TrafficManager : MonoBehaviour
     [SerializeField] private SendingContainer _verifyingContainer;
 
     [SerializeField] private UpgradePanel _upgrades;
+    [SerializeField] private NoUpgradesPanel _noUpgradesPanel;
     
     public TrafficEntry CurrentTraffic => _currentTraffic >= 0 ? _traffic[_currentTraffic] : null;
     
@@ -31,6 +32,7 @@ public class TrafficManager : MonoBehaviour
 
     private bool _isUpgradeSelecting;
     private bool _stopUpgradeSelection;
+    private bool _noUpgradesShown;
 
     private void Awake()
     {
@@ -55,6 +57,22 @@ public class TrafficManager : MonoBehaviour
             if (!_stopUpgradeSelection)
             {
                 SelectUpgrade();
+                if (_currentTraffic+1 >= _traffic.Length)
+                {
+                    _stopUpgradeSelection = true;
+                }
+            }
+            else
+            {
+                if (!_noUpgradesShown)
+                {
+                    _isUpgradeSelecting = true;
+                    _noUpgradesPanel.ShowPanel(() =>
+                    {
+                        _noUpgradesShown = true;
+                        _isUpgradeSelecting = false;
+                    });
+                }
             }
             NextTraffic();
         }
@@ -130,10 +148,6 @@ public class TrafficManager : MonoBehaviour
     {
         Debug.Log("NextTraffic");
         _currentTraffic = Mathf.Clamp(_currentTraffic + 1, 0, _traffic.Length-1);
-        if (_currentTraffic == _traffic.Length-1)
-        {
-            _stopUpgradeSelection = true;
-        }
         _game.ClearPoints();
         _game.CountStage();
         FillCards();

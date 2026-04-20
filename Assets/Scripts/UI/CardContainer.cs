@@ -12,7 +12,8 @@ namespace UI
         [SerializeField] private bool _useMaxUpgrade;
         [SerializeField] private UpgradeType _upgradeType;
         [SerializeField] protected Game Game;
-         
+        
+        public int MaxSlots => _slots.Length;
         public int ContainerSize => _slots.Length - (_useMaxUpgrade && !Game.Upgrades.Contains(_upgradeType) ? 1 : 0);
         public int CardCount => _cards.Count(c => c);
         public int FreeSlotCount => ContainerSize - CardCount;
@@ -22,7 +23,7 @@ namespace UI
 
         protected virtual void Awake()
         {
-            _cards = new PacketCard[_slots.Length];
+            _cards = new PacketCard[MaxSlots];
         }
 
         public void AddCard(PacketCard card)

@@ -8,6 +8,7 @@ namespace UI
 {
     public class UpgradePanel : MonoBehaviour
     {
+        [SerializeField] private GameObject _panel;
         [SerializeField] private Button _upgradeButton1;
         [SerializeField] private Button _upgradeButton2;
         
@@ -25,20 +26,20 @@ namespace UI
         {
             _upgradeButton1.onClick.AddListener(OnButton1);
             _upgradeButton2.onClick.AddListener(OnButton2);
-            gameObject.SetActive(false);
+            _panel.SetActive(false);
         }
 
         private void OnButton1()
         {
             _flagUpgrade1.Execute(_game);
-            gameObject.SetActive(false);
+            _panel.SetActive(false);
             _callback?.Invoke();
         }
 
         private void OnButton2()
         {
             _flagUpgrade2.Execute(_game);
-            gameObject.SetActive(false);
+            _panel.SetActive(false);
             _callback?.Invoke();
         }
 
@@ -51,7 +52,7 @@ namespace UI
             _upgradeText1.text = _flagUpgrade1.Name;
             _upgradeText2.text = _flagUpgrade2.Name;
             
-            gameObject.SetActive(true);
+            _panel.SetActive(true);
         }
     }
 }
