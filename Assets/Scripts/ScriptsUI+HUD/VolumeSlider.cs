@@ -10,7 +10,15 @@ public class VolumeSlider : MonoBehaviour
 
     [SerializeField] private Slider slider;
 
+    [Header("Звук при движении слайдера")]
+    [SerializeField] private AudioClip sliderMoveSound;
+    [SerializeField] private AudioSource audioSource;
+
+    [Header("Задержка между звуками")]
+    [SerializeField] private float soundDelay = 0.08f;     // ← Добавлено (в секундах)
+
     private bool isLoading = false;
+    private float lastSoundTime = 0f;                      // ← Добавлено
 
     private void Awake()
     {
@@ -24,6 +32,9 @@ public class VolumeSlider : MonoBehaviour
         slider.maxValue = 1f;
         audioMixer.GetFloat(volumeParameter, out var currentVolume);
         slider.value = Mathf.Pow(10, currentVolume / 20f);
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -40,6 +51,16 @@ public class VolumeSlider : MonoBehaviour
         {
             float converted = Mathf.Log10(sliderValue) * 20;
             audioMixer.SetFloat(volumeParameter, converted);
+        }
+
+        // Воспроизводим звук с задержкой
+        if (sliderMoveSound != null && audioSource != null)
+        {
+            if (Time.time - lastSoundTime >= soundDelay)
+            {
+                audioSource.PlayOneShot(sliderMoveSound);
+                lastSoundTime = Time.time;
+            }
         }
     }
 }

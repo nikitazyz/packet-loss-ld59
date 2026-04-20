@@ -1,49 +1,55 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Collections;
 using PrimeTween;
 
 [RequireComponent(typeof(Button))]
 public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Переход на сцену")]
-    [SerializeField] private string sceneToLoad = "Game";           // Название игровой сцены
+    [SerializeField] private string sceneToLoad = "Game";
 
     [Header("Звуки")]
-    [SerializeField] private AudioClip hoverSound;                  // Звук при наведении
-    [SerializeField] private AudioClip clickSound;                  // Звук при нажатии
+    [SerializeField] private AudioClip hoverSound;
+    [SerializeField] private AudioClip clickSound;
     [SerializeField] private AudioSource audioSource;
 
     [Header("Визуальный эффект")]
-    [SerializeField] private float hoverScale = 1.12f;              // Насколько увеличивается кнопка
+    [SerializeField] private float hoverScale = 1.12f;      // Размер при наведении
+    [SerializeField] private float pressScale = 0.92f;      // Размер при нажатии (меньше)
     [SerializeField] private Image _fadeImage;
 
     private Button button;
     private RectTransform rectTransform;
+    private Vector3 originalScale;
 
     private void Awake()
     {
         button = GetComponent<Button>();
         rectTransform = GetComponent<RectTransform>();
+        originalScale = rectTransform.localScale;           // Запоминаем исходный размер
 
-        // Подписка на нажатие кнопки
         button.onClick.AddListener(OnPlayClicked);
 
-        // Если AudioSource не назначен — ищем на этом объекте
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
-        _fadeImage.color = new Color(0,0,0,1);
-        _fadeImage.gameObject.SetActive(true);
+        // Настройка fade изображения
+        if (_fadeImage != null)
+        {
+            _fadeImage.color = new Color(0, 0, 0, 1);
+            _fadeImage.gameObject.SetActive(true);
+        }
     }
 
     private void Start()
     {
-        Tween.Alpha(_fadeImage, new TweenSettings<float>(0, 0.15f))
-            .OnComplete(() => _fadeImage.gameObject.SetActive(false));
+        if (_fadeImage != null)
+        {
+            Tween.Alpha(_fadeImage, new TweenSettings<float>(0, 0.15f))
+                .OnComplete(() => _fadeImage.gameObject.SetActive(false));
+        }
     }
 
     private void OnDestroy()
@@ -54,36 +60,42 @@ public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // ====================== НАЖАТИЕ ======================
     private void OnPlayClicked()
     {
-        // Воспроизводим звук нажатия
         if (clickSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(clickSound);
         }
 
-        _fadeImage.gameObject.SetActive(true);
-        Tween.Alpha(_fadeImage, new TweenSettings<float>(1, 0.15f))
-            .OnComplete(() => SceneManager.LoadScene(sceneToLoad));
-        
+        // Эффект нажатия — кнопка становится меньше
+        Tween.Scale(rectTransform, new TweenSettings<float>(pressScale, 0.08f));
+
+        // Fade + переход на сцену
+        if (_fadeImage != null)
+        {
+            _fadeImage.gameObject.SetActive(true);
+            Tween.Alpha(_fadeImage, new TweenSettings<float>(1, 0.15f))
+                .OnComplete(() => SceneManager.LoadScene(sceneToLoad));
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }
     }
 
     // ====================== НАВЕДЕНИЕ ======================
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Воспроизводим звук наведения
         if (hoverSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hoverSound);
         }
 
-        // Плавно увеличиваем кнопку
-        StopAllCoroutines();
-        Tween.Scale(transform, new TweenSettings<float>(hoverScale, 0.15f));
+        // При наведении — увеличиваем кнопку
+        Tween.Scale(rectTransform, new TweenSettings<float>(hoverScale, 0.15f));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Плавно возвращаем кнопку в исходный размер
-        StopAllCoroutines();
-        Tween.Scale(transform, new TweenSettings<float>(1, 0.15f));
+        // При уходе мыши — возвращаем к нормальному размеру
+        Tween.Scale(rectTransform, new TweenSettings<float>(1f, 0.15f));
     }
 }
