@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data;
 using UnityEngine;
 
 namespace UI
@@ -8,8 +9,11 @@ namespace UI
     public class CardContainer : MonoBehaviour
     {
         [SerializeField] private Transform[] _slots;
-        
-        public int ContainerSize => _slots.Length;
+        [SerializeField] private bool _useMaxUpgrade;
+        [SerializeField] private UpgradeType _upgradeType;
+        [SerializeField] protected Game Game;
+         
+        public int ContainerSize => _slots.Length - (_useMaxUpgrade && !Game.Upgrades.Contains(_upgradeType) ? 1 : 0);
         public int CardCount => _cards.Count(c => c);
         public int FreeSlotCount => ContainerSize - CardCount;
         private PacketCard[] _cards;
@@ -18,7 +22,7 @@ namespace UI
 
         protected virtual void Awake()
         {
-            _cards = new PacketCard[ContainerSize];
+            _cards = new PacketCard[_slots.Length];
         }
 
         public void AddCard(PacketCard card)
@@ -31,6 +35,11 @@ namespace UI
                 card.CurrentContainer = this;
                 OnCardAdded(card, slot);
             }
+        }
+
+        protected virtual void Update()
+        {
+            _slots[^1].gameObject.SetActive(!(_useMaxUpgrade && !Game.Upgrades.Contains(_upgradeType)));
         }
 
         protected virtual void OnCardAdded(PacketCard card, int slot){}
@@ -52,7 +61,7 @@ namespace UI
 
         private int GetEmptySlot()
         {
-            for (int i = 0; i < _cards.Length; i++)
+            for (int i = 0; i < ContainerSize; i++)
             {
                 if (!_cards[i])
                 {

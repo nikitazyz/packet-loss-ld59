@@ -1,4 +1,5 @@
 using System;
+using Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -12,6 +13,8 @@ namespace UI
         
         [SerializeField] private ProgressBar[] _progressBars;
         [SerializeField] private float _time;
+        [SerializeField] private UpgradeType _speed;
+        [SerializeField] private UpgradeType _instant;
 
         private float[] _sendingProgress;
         protected override void Awake()
@@ -61,8 +64,9 @@ namespace UI
             _progressBars[slot].Value = _sendingProgress[slot];
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             for (int i = 0; i < ContainerSize; i++)
             {
                 var card = Cards[i];
@@ -71,10 +75,10 @@ namespace UI
                     _progressBars[i].gameObject.SetActive(false);
                     continue;
                 }
-                _sendingProgress[i] += Time.deltaTime;
+                _sendingProgress[i] += Time.deltaTime * (Game.Upgrades.Contains(_speed) ? 1 : 2);
                 _progressBars[i].gameObject.SetActive(true);
                 _progressBars[i].Value = _sendingProgress[i] / (_time * card.Weight);
-                if (_sendingProgress[i] >= _time * card.Weight)
+                if (_sendingProgress[i] >= _time * card.Weight || Game.Upgrades.Contains(_instant))
                 {
                     OnCardSent?.Invoke(card);
                 }

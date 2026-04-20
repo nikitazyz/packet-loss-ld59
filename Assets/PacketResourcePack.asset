@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 728b89a744614f68a190193437c5a88a, type: 3}
   m_Name: PacketResourcePack
   m_EditorClassIdentifier: Assembly-CSharp:UI:PacketResourcePack
   _normal: {fileID: -527773148873748845, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
   _suspicious: {fileID: -5256023296792003769, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
   _virus: {fileID: 2413972784570495900, guid: 5c02f91ff6010d043874a8f5c3942fe1, type: 3}
   _packetNames:
-  - sixseven_x67
+  - sample_packet
   - dead_5pace
   - room_302
   - h3y_1ist3n
@@ -30,23 +30,19 @@ MonoBehaviour:
   - twelve_xxx7b
   - overflow
   - rabbit_p41n
-  - cp_orange
+  - cp_orange_z5
   - dog_3nd
   - corrupt_f1l3
   - road
   - _0_0_7_3d
-  - de_dust2_ab
+  - de_dust2_b42
   - paper_m4r10
   - deadlock
   - up_up_d0wn
-  - 404
-  - 8888
-  - 7777
   - night_1n
   - throttle
   - fall0ut_3ew
   - signal_n0i5e
-  - dont_open
   - 1_am_br34d
   - p3rf3ct_7h
   - city_17
@@ -66,18 +62,4 @@ MonoBehaviour:
   - d00m_sl4y
   - g3t_0v3r
   - 3v3ry_b00g
-  - personal_video
-  - proxy
-  - 228
-  - 418
-  - game_jam
-  - java
-  - minecraft
-  - half-life_3
-  - gta_6
-  - rust_ffa
-  - mw4
-  - dedsec16
-  - 
-  - 
-  - 
+  - ZepTeck

@@ -10,26 +10,20 @@ public class VolumeSlider : MonoBehaviour
 
     [SerializeField] private Slider slider;
 
-    [SerializeField] private float minVolumeDB = -80f;
-    [SerializeField] private float maxVolumeDB = 0f;
-
-    private const string VolumePrefKey = "MasterVolume";
-
-    private bool isLoading = false;   // ← Защита от лишних вызовов
+    private bool isLoading = false;
 
     private void Awake()
     {
         if (slider == null)
             slider = GetComponent<Slider>();
 
-        // Подписываемся на изменение
         if (slider != null)
             slider.onValueChanged.AddListener(OnSliderValueChanged);
-    }
 
-    private void Start()
-    {
-        LoadVolume();   // Загружаем сохранённое значение
+        slider.minValue = 0.0001f;
+        slider.maxValue = 1f;
+        audioMixer.GetFloat(volumeParameter, out var currentVolume);
+        slider.value = Mathf.Pow(10, currentVolume / 20f);
     }
 
     private void OnDestroy()
@@ -38,40 +32,14 @@ public class VolumeSlider : MonoBehaviour
             slider.onValueChanged.RemoveListener(OnSliderValueChanged);
     }
 
-    // Вызывается при любом изменении слайдера пользователем
     private void OnSliderValueChanged(float sliderValue)
     {
-        if (isLoading) return;   // Игнорируем вызов во время загрузки
+        if (isLoading) return;
 
         if (audioMixer != null)
         {
-            float volumeDB = Mathf.Lerp(minVolumeDB, maxVolumeDB, sliderValue);
-            audioMixer.SetFloat(volumeParameter, volumeDB);
+            float converted = Mathf.Log10(sliderValue) * 20;
+            audioMixer.SetFloat(volumeParameter, converted);
         }
-
-        // Сохраняем
-        PlayerPrefs.SetFloat(VolumePrefKey, sliderValue);
-        PlayerPrefs.Save();
-    }
-
-    private void LoadVolume()
-    {
-        if (slider == null) return;
-
-        isLoading = true;
-
-        float savedValue = PlayerPrefs.GetFloat(VolumePrefKey, 1f);
-
-        // Устанавливаем значение слайдера
-        slider.value = savedValue;
-
-        // Применяем громкость в микшер
-        if (audioMixer != null)
-        {
-            float volumeDB = Mathf.Lerp(minVolumeDB, maxVolumeDB, savedValue);
-            audioMixer.SetFloat(volumeParameter, volumeDB);
-        }
-
-        isLoading = false;
     }
 }

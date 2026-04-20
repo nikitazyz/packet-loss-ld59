@@ -18,6 +18,8 @@ public class TrafficManager : MonoBehaviour
     [SerializeField] private SendingContainer _sendingContainer;
     [SerializeField] private SendingContainer _deletingContainer;
     [SerializeField] private SendingContainer _verifyingContainer;
+
+    [SerializeField] private UpgradePanel _upgrades;
     
     public TrafficEntry CurrentTraffic => _currentTraffic >= 0 ? _traffic[_currentTraffic] : null;
     
@@ -26,6 +28,9 @@ public class TrafficManager : MonoBehaviour
     private int _currentTraffic = -1;
     private float _timestamp;
     private float _interval;
+
+    private bool _isUpgradeSelecting;
+    private bool _stopUpgradeSelection;
 
     private void Awake()
     {
@@ -46,8 +51,20 @@ public class TrafficManager : MonoBehaviour
     {
         if (_game.Points >= _traffic[_currentTraffic].PointsToComplete)
         {
+            ClearCards();
+            if (!_stopUpgradeSelection)
+            {
+                SelectUpgrade();
+            }
             NextTraffic();
         }
+    }
+
+    private void SelectUpgrade()
+    {
+        _isUpgradeSelecting = true;
+        var current = _traffic[_currentTraffic];
+        _upgrades.ShowUpgradePanel(current.FlagUpgrade1, current.FlagUpgrade2, () => _isUpgradeSelecting = false);
     }
 
     private void CardVerified(PacketCard card)
@@ -113,18 +130,27 @@ public class TrafficManager : MonoBehaviour
     {
         Debug.Log("NextTraffic");
         _currentTraffic = Mathf.Clamp(_currentTraffic + 1, 0, _traffic.Length-1);
+        if (_currentTraffic == _traffic.Length-1)
+        {
+            _stopUpgradeSelection = true;
+        }
         _game.ClearPoints();
+        _game.CountStage();
+        FillCards();
+    }
+
+    private void ClearCards()
+    {
         _cards.Clear();
         _buffer.Clear();
         _sendingContainer.Clear();
         _deletingContainer.Clear();
         _verifyingContainer.Clear();
-        FillCards();
     }
 
     private void Update()
     {
-        if (Time.time > _timestamp + _interval)
+        if (Time.time > _timestamp + _interval && !_isUpgradeSelecting)
         {
             _timestamp = Time.time;
             NextCard();
@@ -184,11 +210,16 @@ public class TrafficManager : MonoBehaviour
         [SerializeField] private PacketPoolEntry[] _packetPool;
         [SerializeField] private float _intervalMin = 10f;
         [SerializeField] private float _intervalMax = 20f;
+        [SerializeField] private FlagUpgrade _flagUpgrade1;
+        [SerializeField] private FlagUpgrade _flagUpgrade2;
         
         public int PointsToComplete => _pointsToComplete;
         public PacketPoolEntry[] PacketPool => _packetPool;
         public float IntervalMin => _intervalMin;
         public float IntervalMax => _intervalMax;
+        
+        public FlagUpgrade FlagUpgrade1 => _flagUpgrade1;
+        public FlagUpgrade FlagUpgrade2 => _flagUpgrade2;
         
         [Serializable]
         public class PacketPoolEntry

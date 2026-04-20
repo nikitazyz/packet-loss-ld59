@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Collections;
+using PrimeTween;
 
 [RequireComponent(typeof(Button))]
 public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -17,17 +19,15 @@ public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     [Header("Визуальный эффект")]
     [SerializeField] private float hoverScale = 1.12f;              // Насколько увеличивается кнопка
-    [SerializeField] private float animationSpeed = 8f;             // Скорость анимации
+    [SerializeField] private Image _fadeImage;
 
     private Button button;
     private RectTransform rectTransform;
-    private Vector3 originalScale;
 
     private void Awake()
     {
         button = GetComponent<Button>();
         rectTransform = GetComponent<RectTransform>();
-        originalScale = rectTransform.localScale;
 
         // Подписка на нажатие кнопки
         button.onClick.AddListener(OnPlayClicked);
@@ -35,6 +35,15 @@ public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         // Если AudioSource не назначен — ищем на этом объекте
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
+
+        _fadeImage.color = new Color(0,0,0,1);
+        _fadeImage.gameObject.SetActive(true);
+    }
+
+    private void Start()
+    {
+        Tween.Alpha(_fadeImage, new TweenSettings<float>(0, 0.15f))
+            .OnComplete(() => _fadeImage.gameObject.SetActive(false));
     }
 
     private void OnDestroy()
@@ -51,14 +60,10 @@ public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             audioSource.PlayOneShot(clickSound);
         }
 
-        // Переход на сцену с небольшой задержкой
-        StartCoroutine(LoadSceneAfterDelay(0.15f));
-    }
-
-    private IEnumerator LoadSceneAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(sceneToLoad);
+        _fadeImage.gameObject.SetActive(true);
+        Tween.Alpha(_fadeImage, new TweenSettings<float>(1, 0.15f))
+            .OnComplete(() => SceneManager.LoadScene(sceneToLoad));
+        
     }
 
     // ====================== НАВЕДЕНИЕ ======================
@@ -72,31 +77,13 @@ public class PlayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         // Плавно увеличиваем кнопку
         StopAllCoroutines();
-        StartCoroutine(AnimateScale(true));
+        Tween.Scale(transform, new TweenSettings<float>(hoverScale, 0.15f));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         // Плавно возвращаем кнопку в исходный размер
         StopAllCoroutines();
-        StartCoroutine(AnimateScale(false));
-    }
-
-    // Плавная анимация масштаба
-    private IEnumerator AnimateScale(bool isHovering)
-    {
-        Vector3 targetScale = isHovering ? originalScale * hoverScale : originalScale;
-
-        while (Vector3.Distance(rectTransform.localScale, targetScale) > 0.001f)
-        {
-            rectTransform.localScale = Vector3.Lerp(
-                rectTransform.localScale, 
-                targetScale, 
-                Time.deltaTime * animationSpeed
-            );
-            yield return null;
-        }
-
-        rectTransform.localScale = targetScale;
+        Tween.Scale(transform, new TweenSettings<float>(1, 0.15f));
     }
 }

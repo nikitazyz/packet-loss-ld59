@@ -1,4 +1,5 @@
 using System;
+using Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -49,13 +50,13 @@ namespace UI
             SendRequest?.Invoke(packet);
         }
         
-        private void Update()
+        protected override void Update()
         {
             foreach (var card in Cards)
             {
                 if (!card) continue;
                 
-                card.UpdateCard(Time.deltaTime);
+                card.UpdateCard(Time.deltaTime * (Game.Upgrades.Contains(UpgradeType.BufferTime) ? 0.5f : 1f));
                 if (card.RemainingTime <= 0)
                 {
                     OnCardExpired?.Invoke(card);

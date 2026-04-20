@@ -1,15 +1,48 @@
+using System;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
+
+    [SerializeField] private string _menuScene;
+    [SerializeField] private Game _game;
+    
     [Header("Панели")]
     [SerializeField] private GameObject pausePanel;        // Панель паузы
     [SerializeField] private GameObject confirmPanel;      // Окно подтверждения "Выйти в меню?"
     [SerializeField] private GameObject gameOverPanel;     // ← Новая панель Game Over
+    [SerializeField] private Image _fadeImage;
 
     [Header("Кнопка паузы в игре")]
     [SerializeField] private GameObject pauseButton;       // Кнопка паузы (в HUD)
+
+    private void Awake()
+    {
+        _game.OnTakeDamage += CheckGameOver;
+        _fadeImage.gameObject.SetActive(true);
+        _fadeImage.color = new Color(0, 0, 0, 1f);
+    }
+
+    private void CheckGameOver()
+    {
+        if (_game.Health <= 0)
+        {
+            ShowGameOver();
+        }
+    }
+
+    private void Start()
+    {
+        pausePanel.SetActive(false);
+        confirmPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
+
+        Tween.Alpha(_fadeImage, new TweenSettings<float>(0, 0.15f))
+            .OnComplete(() => _fadeImage.gameObject.SetActive(false));
+    }
 
     // ====================== ПАУЗА ======================
     public void PauseGame()
@@ -49,13 +82,16 @@ public class PauseManager : MonoBehaviour
     {
         if (confirmPanel != null) 
             confirmPanel.SetActive(true);
+        
     }
 
     // ====================== ПОДТВЕРЖДЕНИЕ ВЫХОДА В МЕНЮ ======================
     public void ConfirmGoToMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");     // ← Замени на название своей сцены меню
+        _fadeImage.gameObject.SetActive(true);
+        Tween.Alpha(_fadeImage, new TweenSettings<float>(1, 0.15f))
+            .OnComplete(() => SceneManager.LoadScene(_menuScene));
     }
 
     // ====================== ОТМЕНА ======================
@@ -88,17 +124,6 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);   // Перезапускает текущую сцену
-    }
-
-    // ====================== ВЫХОД ИЗ ИГРЫ ======================
-    public void QuitGame()
-    {
-        Time.timeScale = 1f;
-
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
-        #endif
+        
     }
 }
