@@ -1203,7 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21296f6152bf2e845938dda753be1a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayButton
-  sceneToLoad: TestingScene
+  sceneToLoad: GameScene
   hoverSound: {fileID: 8300000, guid: 5da43451815b0e041b20347ead7bbaa0, type: 3}
   clickSound: {fileID: 8300000, guid: 625ad317b451ec147984e94636d712a6, type: 3}
   audioSource: {fileID: 909638560}

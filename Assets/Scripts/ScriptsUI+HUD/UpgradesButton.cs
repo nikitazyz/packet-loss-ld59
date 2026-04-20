@@ -2,90 +2,128 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections;
 
 [RequireComponent(typeof(Button))]
 public class UpgradesButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Звуки")]
-    [SerializeField] private AudioClip hoverSound;      // Звук при наведении
-    [SerializeField] private AudioClip clickSound;      // Звук при нажатии
+    [SerializeField] private AudioClip hoverInSound;
+    [SerializeField] private AudioClip hoverOutSound;
     [SerializeField] private AudioSource audioSource;
 
     [Header("Текст")]
-    [SerializeField] private TMP_Text textMesh;         // TextMeshPro текст кнопки
+    [SerializeField] private TMP_Text textMesh;
+
+    [Header("Картинка с анимацией")]
+    [SerializeField] private RectTransform hoverImage;           // ← Изменил на RectTransform
+    [SerializeField] private float animationDuration = 0.25f;    // Длительность анимации
+    [SerializeField] private float hideOffset = 80f;             // На сколько пикселей картинка будет выше в скрытом состоянии
 
     private Button button;
+    private Vector2 originalAnchoredPosition;
+    private Coroutine currentAnimation;
 
     private void Awake()
     {
         button = GetComponent<Button>();
 
-        // Автоматически находим текст, если не назначен
+        // Отключаем клик по кнопке
+        button.interactable = true;
+        button.onClick.RemoveAllListeners();
+
         if (textMesh == null)
             textMesh = GetComponentInChildren<TMP_Text>();
 
-        // Подписываемся на нажатие кнопки
-        button.onClick.AddListener(OnButtonClicked);
-
-        // Если AudioSource не назначен — ищем на кнопке
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
-        // Изначально подчёркивание выключено
-        DisableUnderline();
-    }
-
-    private void OnDestroy()
-    {
-        if (button != null)
-            button.onClick.RemoveListener(OnButtonClicked);
-    }
-
-    // ====================== НАЖАТИЕ ======================
-    private void OnButtonClicked()
-    {
-        if (clickSound != null && audioSource != null)
+        // Подготовка картинки
+        if (hoverImage != null)
         {
-            audioSource.PlayOneShot(clickSound);
+            originalAnchoredPosition = hoverImage.anchoredPosition;
+            // Изначально прячем картинку сверху
+            hoverImage.anchoredPosition = new Vector2(originalAnchoredPosition.x, originalAnchoredPosition.y + hideOffset);
+            hoverImage.gameObject.SetActive(false);
         }
 
-        // Здесь можешь добавить свою логику для этой кнопки
-        Debug.Log($"Кнопка нажата: {gameObject.name}");
+        DisableUnderline();
     }
 
     // ====================== НАВЕДЕНИЕ ======================
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Звук при наведении
-        if (hoverSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(hoverSound);
-        }
+        if (hoverInSound != null && audioSource != null)
+            audioSource.PlayOneShot(hoverInSound);
 
-        // Включаем подчёркивание
         EnableUnderline();
+
+        // Показываем и анимируем картинку
+        if (hoverImage != null)
+            StartAnimation(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Выключаем подчёркивание
+        if (hoverOutSound != null && audioSource != null)
+            audioSource.PlayOneShot(hoverOutSound);
+
         DisableUnderline();
+
+        // Прячем с анимацией
+        if (hoverImage != null)
+            StartAnimation(false);
+    }
+
+    // ====================== АНИМАЦИЯ ВЫЕЗДА ======================
+    private void StartAnimation(bool show)
+    {
+        if (hoverImage == null) return;
+
+        if (currentAnimation != null)
+            StopCoroutine(currentAnimation);
+
+        currentAnimation = StartCoroutine(AnimateHoverImage(show));
+    }
+
+    private IEnumerator AnimateHoverImage(bool show)
+    {
+        if (!hoverImage.gameObject.activeSelf && show)
+            hoverImage.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        Vector2 startPos = hoverImage.anchoredPosition;
+        Vector2 targetPos = show 
+            ? originalAnchoredPosition 
+            : new Vector2(originalAnchoredPosition.x, originalAnchoredPosition.y + hideOffset);
+
+        while (elapsed < animationDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / animationDuration;
+            t = Mathf.SmoothStep(0f, 1f, t);                    // Плавная кривая
+
+            hoverImage.anchoredPosition = Vector2.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
+        hoverImage.anchoredPosition = targetPos;
+
+        // Выключаем объект после скрытия
+        if (!show)
+            hoverImage.gameObject.SetActive(false);
     }
 
     // ====================== ПОДЧЁРКИВАНИЕ ======================
     private void EnableUnderline()
     {
         if (textMesh != null)
-        {
-            textMesh.fontStyle = textMesh.fontStyle | FontStyles.Underline;
-        }
+            textMesh.fontStyle |= FontStyles.Underline;
     }
 
     private void DisableUnderline()
     {
         if (textMesh != null)
-        {
-            textMesh.fontStyle = textMesh.fontStyle & ~FontStyles.Underline;
-        }
+            textMesh.fontStyle &= ~FontStyles.Underline;
     }
 }

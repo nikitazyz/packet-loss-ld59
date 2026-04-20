@@ -60,8 +60,7 @@ public class VolumeSlider : MonoBehaviour
 
         isLoading = true;
 
-        // Загружаем значение (по умолчанию 75%)
-        float savedValue = PlayerPrefs.GetFloat(VolumePrefKey, 0.75f);
+        float savedValue = PlayerPrefs.GetFloat(VolumePrefKey, 1f);
 
         // Устанавливаем значение слайдера
         slider.value = savedValue;
