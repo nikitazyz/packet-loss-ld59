@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
@@ -21,6 +22,9 @@ public class TrafficManager : MonoBehaviour
 
     [SerializeField] private UpgradePanel _upgrades;
     [SerializeField] private NoUpgradesPanel _noUpgradesPanel;
+
+    [SerializeField] private float _eventChanceOverStage = 0.1f;
+    [SerializeField] private float _eventTime = 15f;
     
     public TrafficEntry CurrentTraffic => _currentTraffic >= 0 ? _traffic[_currentTraffic] : null;
     
@@ -33,6 +37,8 @@ public class TrafficManager : MonoBehaviour
     private bool _isUpgradeSelecting;
     private bool _stopUpgradeSelection;
     private bool _noUpgradesShown;
+    
+    private Coroutine _delayedEventCoroutine;
 
     private void Awake()
     {
@@ -53,6 +59,12 @@ public class TrafficManager : MonoBehaviour
     {
         if (_game.Points >= _traffic[_currentTraffic].PointsToComplete)
         {
+            if (_delayedEventCoroutine != null)
+            {
+                StopCoroutine(_delayedEventCoroutine);
+            }
+            
+            _game.StopEvent();
             ClearCards();
             if (!_stopUpgradeSelection)
             {
@@ -82,7 +94,13 @@ public class TrafficManager : MonoBehaviour
     {
         _isUpgradeSelecting = true;
         var current = _traffic[_currentTraffic];
-        _upgrades.ShowUpgradePanel(current.FlagUpgrade1, current.FlagUpgrade2, () => _isUpgradeSelecting = false);
+        _upgrades.ShowUpgradePanel(current.FlagUpgrade1, current.FlagUpgrade2, UpgradeSelected);
+    }
+
+    private void UpgradeSelected()
+    {
+        _isUpgradeSelecting = false;
+        MakeEvent();
     }
 
     private void CardVerified(PacketCard card)
@@ -151,6 +169,25 @@ public class TrafficManager : MonoBehaviour
         _game.ClearPoints();
         _game.CountStage();
         FillCards();
+    }
+
+    private void MakeEvent()
+    {
+        var stage = _currentTraffic;
+        var chance = _eventChanceOverStage * stage;
+
+        var random = Random.value;
+        if (random <= chance)
+        {
+            _game.StartEvent();
+            _delayedEventCoroutine = StartCoroutine(DelayedEventStop());
+        }
+    }
+
+    IEnumerator DelayedEventStop()
+    {
+        yield return new WaitForSeconds(_eventTime);
+        _game.StopEvent();
     }
 
     private void ClearCards()

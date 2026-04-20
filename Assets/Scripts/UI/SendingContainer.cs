@@ -16,6 +16,8 @@ namespace UI
         [SerializeField] private UpgradeType _speed;
         [SerializeField] private UpgradeType _instant;
 
+        [SerializeField] private GameEventType _eventType;
+
         private float[] _sendingProgress;
         protected override void Awake()
         {
@@ -35,24 +37,27 @@ namespace UI
             {
                 return;
             }
-            Debug.Log("Packet drop");
             var rectTransform = GetComponent<RectTransform>();
+            
+            Vector3[] corners = new Vector3[4];
+            rectTransform.GetWorldCorners(corners);
 
-            var min = rectTransform.rect.min;
-            var max = rectTransform.rect.max;
-            var pos = (Vector2)transform.position;
+            Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+            Vector2 max = new Vector2(float.MinValue, float.MinValue);
 
-            var minBound = pos + min;
-            var maxBound = pos + max;
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
+
+                min = Vector2.Min(min, screenPoint);
+                max = Vector2.Max(max, screenPoint);
+            }
 
             var mpos = eventData.position;
-
-            Debug.Log($"min: {min},  max: {max}, pos: {pos}");
-            Debug.Log($"Mouse: {mpos}, min: {minBound}, max: {maxBound}");
             
-            if (mpos.x < minBound.x ||  mpos.x > maxBound.x)
+            if (mpos.x < min.x ||  mpos.x > max.x)
                 return;
-            if (mpos.y < minBound.y ||  mpos.y > maxBound.y)
+            if (mpos.y < min.y ||  mpos.y > max.y)
                 return;
             
             SendRequest?.Invoke(packet);
@@ -75,7 +80,7 @@ namespace UI
                     _progressBars[i].gameObject.SetActive(false);
                     continue;
                 }
-                _sendingProgress[i] += Time.deltaTime * (Game.Upgrades.Contains(_speed) ? 3 : 1);
+                _sendingProgress[i] += Time.deltaTime * (Game.Upgrades.Contains(_speed) ? 3 : 1) * (Game.EventType == _eventType ? 0.75f : 1);
                 _progressBars[i].gameObject.SetActive(true);
                 _progressBars[i].Value = _sendingProgress[i] / (_time * card.Weight);
                 if (_sendingProgress[i] >= _time * card.Weight || Game.Upgrades.Contains(_instant))

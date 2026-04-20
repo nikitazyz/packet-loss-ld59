@@ -14,6 +14,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private GameObject pausePanel;        // Панель паузы
     [SerializeField] private GameObject confirmPanel;      // Окно подтверждения "Выйти в меню?"
     [SerializeField] private GameObject gameOverPanel;     // ← Новая панель Game Over
+    [SerializeField] private GameObject _tutorialPanel;
     [SerializeField] private Image _fadeImage;
 
     [Header("Кнопка паузы в игре")]
@@ -125,5 +126,19 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);   // Перезапускает текущую сцену
         
+    }
+
+    public void OpenTutorialPanel()
+    {
+        Time.timeScale = 0;
+        
+        _tutorialPanel.SetActive(true);
+    }
+
+    public void CloseTutorialPanel()
+    {
+        Time.timeScale = 1f;
+        
+        _tutorialPanel.SetActive(false);
     }
 }

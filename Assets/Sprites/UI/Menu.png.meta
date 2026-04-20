@@ -144,6 +144,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -151,8 +164,8 @@ TextureImporter:
       name: Menu_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 2008
+        x: 10
+        y: 2020
         width: 928
         height: 532
       alignment: 0
@@ -173,12 +186,12 @@ TextureImporter:
       name: Menu_1
       rect:
         serializedVersion: 2
-        x: 999
-        y: 2212
-        width: 143
-        height: 115
+        x: 1004
+        y: 2224
+        width: 141
+        height: 114
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -195,9 +208,9 @@ TextureImporter:
       name: Menu_9
       rect:
         serializedVersion: 2
-        x: 1400
-        y: 2195
-        width: 82
+        x: 1403
+        y: 2207
+        width: 83
         height: 149
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -217,8 +230,8 @@ TextureImporter:
       name: Menu_10
       rect:
         serializedVersion: 2
-        x: 1710
-        y: 1070
+        x: 1686
+        y: 1060
         width: 900
         height: 1500
       alignment: 0
@@ -239,9 +252,9 @@ TextureImporter:
       name: Menu_11
       rect:
         serializedVersion: 2
-        x: 997
-        y: 2007
-        width: 265
+        x: 1001
+        y: 2019
+        width: 264
         height: 123
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -261,9 +274,9 @@ TextureImporter:
       name: Menu_12
       rect:
         serializedVersion: 2
-        x: 1359
-        y: 2007
-        width: 264
+        x: 1362
+        y: 2019
+        width: 265
         height: 123
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -283,8 +296,8 @@ TextureImporter:
       name: Menu_13
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1362
+        x: 4
+        y: 1374
         width: 928
         height: 532
       alignment: 0
@@ -305,9 +318,9 @@ TextureImporter:
       name: Menu_14
       rect:
         serializedVersion: 2
-        x: 996
-        y: 1393
-        width: 266
+        x: 1001
+        y: 1405
+        width: 264
         height: 123
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -327,8 +340,8 @@ TextureImporter:
       name: Menu_15
       rect:
         serializedVersion: 2
-        x: 1352
-        y: 1393
+        x: 1356
+        y: 1405
         width: 266
         height: 123
       alignment: 0
@@ -349,8 +362,8 @@ TextureImporter:
       name: Menu_16
       rect:
         serializedVersion: 2
-        x: 6
-        y: 684
+        x: 10
+        y: 696
         width: 928
         height: 532
       alignment: 0
@@ -371,12 +384,12 @@ TextureImporter:
       name: Menu_2
       rect:
         serializedVersion: 2
-        x: 1195
-        y: 2213
-        width: 143
-        height: 116
+        x: 1200
+        y: 2226
+        width: 141
+        height: 114
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -393,8 +406,8 @@ TextureImporter:
       name: Menu_17
       rect:
         serializedVersion: 2
-        x: 1004
-        y: 712
+        x: 1008
+        y: 724
         width: 384
         height: 394
       alignment: 0
@@ -415,8 +428,8 @@ TextureImporter:
       name: Menu_18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 4
+        y: 12
         width: 928
         height: 532
       alignment: 0

@@ -27,7 +27,6 @@ namespace UI
             {
                 return;
             }
-            Debug.Log("Packet drop");
             var rectTransform = GetComponent<RectTransform>();
 
             var min = rectTransform.rect.min;
@@ -38,9 +37,6 @@ namespace UI
             var maxBound = pos + max;
 
             var mpos = eventData.position;
-
-            Debug.Log($"min: {min},  max: {max}, pos: {pos}");
-            Debug.Log($"Mouse: {mpos}, min: {minBound}, max: {maxBound}");
             
             if (mpos.x < minBound.x ||  mpos.x > maxBound.x)
                 return;
@@ -56,7 +52,9 @@ namespace UI
             {
                 if (!card) continue;
                 
-                card.UpdateCard(Time.deltaTime * (Game.Upgrades.Contains(UpgradeType.BufferTime) ? 0.5f : 1f));
+                card.UpdateCard(Time.deltaTime * 
+                                (Game.Upgrades.Contains(UpgradeType.BufferTime) ? 0.5f : 1f) * 
+                                (Game.EventType == GameEventType.Buffer ? 1.5f : 1f));
                 if (card.RemainingTime <= 0)
                 {
                     OnCardExpired?.Invoke(card);

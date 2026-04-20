@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 833f39137f4840f8bdb818ebe9fa292e, type: 3}
-  m_Name: PacketData
+  m_Name: PacketData 1
   m_EditorClassIdentifier: Assembly-CSharp::Data.PacketData
-  <Weight>k__BackingField: 15
-  <Time>k__BackingField: 20
-  <IsVirus>k__BackingField: 1
-  <IsSuspicious>k__BackingField: 1
+  <Weight>k__BackingField: 4
+  <Time>k__BackingField: 40
+  <IsVirus>k__BackingField: 0
+  <IsSuspicious>k__BackingField: 0

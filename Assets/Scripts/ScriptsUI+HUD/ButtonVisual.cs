@@ -33,24 +33,24 @@ public class ButtonVisual : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (enableHover)
-            Tween.Scale(rectTransform, originalScale * hoverScale, hoverDuration, Ease.OutQuad);
+            Tween.Scale(rectTransform, new TweenSettings<Vector3>(originalScale * hoverScale, hoverDuration, Ease.OutQuad, useUnscaledTime: true));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (enableHover)
-            Tween.Scale(rectTransform, originalScale, hoverDuration, Ease.OutQuad);
+            Tween.Scale(rectTransform, new TweenSettings<Vector3>(originalScale, hoverDuration, Ease.OutQuad, useUnscaledTime: true));
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         if (enablePress)
-            Tween.Scale(rectTransform, originalScale * pressScale, pressDuration, Ease.OutQuad);
+            Tween.Scale(rectTransform, new TweenSettings<Vector3>(originalScale * pressScale, pressDuration, Ease.OutQuad, useUnscaledTime: true));
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (enablePress)
-            Tween.Scale(rectTransform, originalScale, pressDuration, Ease.OutQuad);
+            Tween.Scale(rectTransform, new TweenSettings<Vector3>(originalScale, pressDuration, Ease.OutQuad, useUnscaledTime: true));
     }
 }

@@ -56,10 +56,10 @@ public class VolumeSlider : MonoBehaviour
         // Воспроизводим звук с задержкой
         if (sliderMoveSound != null && audioSource != null)
         {
-            if (Time.time - lastSoundTime >= soundDelay)
+            if (Time.unscaledTime - lastSoundTime >= soundDelay)
             {
                 audioSource.PlayOneShot(sliderMoveSound);
-                lastSoundTime = Time.time;
+                lastSoundTime = Time.unscaledTime;
             }
         }
     }
